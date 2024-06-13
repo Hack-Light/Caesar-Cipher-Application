@@ -1,7 +1,3 @@
-Sure! Here's a detailed README for your Caesar Cipher Text Encryption/Decryption Application:
-
----
-
 # Caesar Cipher Text Encryption/Decryption Application
 
 This application allows users to encrypt plaintext using a Caesar Cipher and decrypt ciphertext back to plaintext, given the correct key. It is built using HTML, CSS, and JavaScript and provides a simple, interactive interface for users to perform encryption and decryption.
