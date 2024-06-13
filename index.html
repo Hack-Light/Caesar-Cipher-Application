@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a href="https://front.codes/" class="logo" target="_blank">
+      <img src="https://assets.codepen.io/1462889/fcy.png" alt="" />
+    </a>
+
+    <div class="section">
+      <div class="container">
+        <div class="row full-height justify-content-center">
+          <div class="col-12 text-center align-self-center py-5">
+            <div class="section pb-5 pt-5 pt-sm-2 text-center">
+              <h6 class="mb-0 pb-3">
+                <span>Encrypt </span><span>Decrypt</span>
+              </h6>
+              <input
+                class="checkbox"
+                type="checkbox"
+                id="reg-log"
+                name="reg-log"
+              />
+              <label for="reg-log"></label>
+              <div class="card-3d-wrap mx-auto">
+                <div class="card-3d-wrapper">
+                  <div class="card-front">
+                    <div class="center-wrap">
+                      <div class="section text-center">
+                        <h4 class="mb-4 pb-3">Encrypt</h4>
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            name="encrypt"
+                            class="form-style"
+                            placeholder="Text to Encrypt"
+                            id="encrypt"
+                            autocomplete="off"
+                          />
+                          <i class="input-icon uil uil-at"></i>
+                        </div>
+                        <div class="form-group mt-2">
+                          <input
+                            type="number"
+                            name="key"
+                            class="form-style"
+                            placeholder="Shift By"
+                            id="key"
+                            autocomplete="off"
+                          />
+                          <i class="input-icon uil uil-lock-alt"></i>
+                        </div>
+                        <a href="#" class="btn mt-4">submit</a>
+                        <p class="mb-0 mt-4 text-center">
+                          <a id="encrypted" href="#0" class="link"
+                            >Forgot your password?</a
+                          >
+                          <button class="btn btn-primary" id="copy-encrypted">
+                            Copy
+                          </button>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-back">
+                    <div class="center-wrap">
+                      <div class="section text-center">
+                        <h4 class="mb-4 pb-3">Decrypt</h4>
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            name="decrypt"
+                            class="form-style"
+                            placeholder="Text to Decrypt"
+                            id="decrypt"
+                            autocomplete="off"
+                          />
+                          <i class="input-icon uil uil-at"></i>
+                        </div>
+                        <div class="form-group mt-2">
+                          <input
+                            type="number"
+                            name="key-2"
+                            class="form-style"
+                            placeholder="Shift By"
+                            id="key-2"
+                            autocomplete="off"
+                          />
+                          <i class="input-icon uil uil-lock-alt"></i>
+                        </div>
+                        <a href="#" class="btn mt-4">submit</a>
+                        <p class="mb-0 mt-4 text-center">
+                          <a id="decrypted" href="#0" class="link"
+                            >Forgot your password?</a
+                          >
+                          <button class="btn btn-primary" id="copy-decrypted">
+                            Copy
+                          </button>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    function encrypt(text, key) {
+      return text
+        .split("")
+        .map((char) => {
+          const code = char.charCodeAt(0);
+          if (char.match(/[a-z]/)) {
+            return String.fromCharCode(((code - 97 + key) % 26) + 97);
+          } else if (char.match(/[A-Z]/)) {
+            return String.fromCharCode(((code - 65 + key) % 26) + 65);
+          } else {
+            return char;
+          }
+        })
+        .join("");
+    }
+
+    function decrypt(text, key) {
+      return text
+        .split("")
+        .map((char) => {
+          const code = char.charCodeAt(0);
+          if (char.match(/[a-z]/)) {
+            return String.fromCharCode(((code - 97 - key + 26) % 26) + 97);
+          } else if (char.match(/[A-Z]/)) {
+            return String.fromCharCode(((code - 65 - key + 26) % 26) + 65);
+          } else {
+            return char;
+          }
+        })
+        .join("");
+    }
+
+    document
+      .querySelector(".card-front .btn")
+      .addEventListener("click", (event) => {
+        event.preventDefault();
+        const text = document.getElementById("encrypt").value;
+        const key = parseInt(document.getElementById("key").value);
+        const encryptedText = encrypt(text, key);
+        document.getElementById(
+          "encrypted"
+        ).textContent = `Encrypted Text: ${encryptedText}`;
+      });
+
+    document
+      .querySelector(".card-back .btn")
+      .addEventListener("click", (event) => {
+        event.preventDefault();
+        const text = document.getElementById("decrypt").value;
+        const key = parseInt(document.getElementById("key-2").value);
+        const decryptedText = decrypt(text, key);
+        document.getElementById(
+          "decrypted"
+        ).textContent = `Decrypted Text: ${decryptedText}`;
+      });
+
+    document.getElementById("copy-encrypted").addEventListener("click", () => {
+      const encryptedText = document
+        .getElementById("encrypted")
+        .textContent.replace("Encrypted Text: ", "");
+      navigator.clipboard.writeText(encryptedText).then(() => {
+        alert("Encrypted text copied to clipboard");
+      });
+    });
+
+    document.getElementById("copy-decrypted").addEventListener("click", () => {
+      const decryptedText = document
+        .getElementById("decrypted")
+        .textContent.replace("Decrypted Text: ", "");
+      navigator.clipboard.writeText(decryptedText).then(() => {
+        alert("Decrypted text copied to clipboard");
+      });
+    });
+  </script>
+</html>
